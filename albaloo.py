@@ -41,7 +41,8 @@ def analyze(website):
 
 
 now = datetime.datetime.now()
-directory = now.strftime('%Y-%m-%d')
+directory = 'results/'
+directory += now.strftime('%Y-%m-%d')
 
 if not os.path.exists(directory):
     print("make new folder: "+directory+"\n")
