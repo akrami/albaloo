@@ -18,6 +18,10 @@ class Website:
         self.hsts = False
 
     def check_ssllab(self):
+        """
+        Check SSLLAB Result and Score
+        :return: json or error
+        """
         payload = {
             'host': self.address,
             'startNew': 'on',
@@ -67,13 +71,25 @@ class Website:
                 return 'Not Available'
 
     def get_ip(self):
+        """
+        Get Website IP
+        :return: string
+        """
         self.ip = '0.0.0.0'
         return True
 
     def check_redirect(self):
+        """
+        is http redirected to https
+        :return: boolean
+        """
         self.redirect = True
         return True
 
     def check_hsts(self):
+        """
+        check if hsts is available on ssl
+        :return: boolean
+        """
         self.hsts = True
         return True
