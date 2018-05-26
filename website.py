@@ -31,12 +31,12 @@ class Website:
         try:
             response = requests.get('https://api.ssllabs.com/api/v3/analyze', params=payload)
         except ConnectionError:
-            print("Connection Error! Please check your internet connection. retry in 20 seconds...")
+            print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
             time.sleep(20)
             return self.check_ssllab()
         else:
             if response.status_code == 200:
-                print("initialize successful: " + self.address)
+                print("[{0}] SSLLAB: Initiated!".format(self.address))
                 return self.__analyze_ssllab()
             else:
                 return 'Not Available'
@@ -50,21 +50,20 @@ class Website:
         try:
             response = requests.get('https://api.ssllabs.com/api/v3/analyze', params=payload)
         except ConnectionError:
-            print("Connection Error! Please check your internet connection. retry in 20 seconds...")
+            print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
             time.sleep(20)
             return self.__analyze_ssllab()
         else:
             if response.status_code == 200:
                 json_response = response.json()
                 if json_response['status'] == 'READY':
-                    print("analyze successful: " + self.address)
+                    print("[{0}] SSLLAB: Analyze Successful!".format(self.address))
                     return json.dumps(json_response, sort_keys=False, indent=4)
                 elif json_response['status'] == 'ERROR':
-                    print("analyze failed: " + self.address)
+                    print("[{0}] SSLLAB: Analyze Failed!".format(self.address))
                     return json_response['statusMessage']
                 else:
-                    print(
-                        "analyze " + self.address + ", status: " + json_response['status'] + ", retry in 20 seconds...")
+                    print("[{0}] SSLLAB: Status: {1}".format(self.address, json_response['status']))
                     time.sleep(20)
                     return self.__analyze_ssllab()
             else:
