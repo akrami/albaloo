@@ -2,6 +2,7 @@ import json
 import time
 import socket
 import requests
+import re
 
 
 class Website:
@@ -86,8 +87,20 @@ class Website:
         is http redirected to https
         :return: boolean
         """
-        self.redirect = True
-        return True
+        if re.match(r'^https://', self.address):
+            host = self.address.replace('https://', 'http://')
+        elif re.match(r'^http://', self.address):
+            host = self.address
+        else:
+            host = 'http://{0}'.format(self.address)
+        try:
+            response = requests.get(host)
+        except ConnectionError:
+            self.redirect = False
+        else:
+            self.redirect = True if re.match(r'^https://', response.url) else False
+        finally:
+            return self.redirect
 
     def check_hsts(self):
         """

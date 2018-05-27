@@ -15,6 +15,7 @@ for line in file:
     temp = website.Website(line)
     ip = temp.check_ip()
     print('[{0}] IP: {1}'.format(line, ip))
+    print('[{0}] HTTPS REDIRECT: {1}'.format(line, temp.check_redirect()))
     print("[{0}] SSLLAB: Start ".format(line))
     result = temp.check_ssllab()
     print("[{0}] SSLLAB: Finished ".format(line))
