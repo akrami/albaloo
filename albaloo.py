@@ -12,11 +12,11 @@ parser.add_option('-i', '--input', dest='input_file', help='List of Hosts (ignor
 parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true', help='Verbose Mode')
 options, remainder = parser.parse_args()
 directory = options.output_directory
+verbose = options.verbose
 if not os.path.exists(directory):
     if verbose:
         print("[Main] New Directory: {0}".format(directory))
     os.makedirs(directory)
-verbose = options.verbose
 if options.host:
     result = website.Website(options.host)
     ip = result.check_ip(verbose)
