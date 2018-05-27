@@ -18,7 +18,7 @@ class Website:
         self.redirect = False
         self.hsts = False
 
-    def check_ssllab(self):
+    def check_ssllab(self, verbose=True):
         """
         Check SSLLAB Result and Score
         :return: json or error
@@ -31,18 +31,25 @@ class Website:
         }
         try:
             response = requests.get('https://api.ssllabs.com/api/v3/analyze', params=payload)
-        except ConnectionError:
-            print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
+        except requests.exceptions.ConnectionError:
+            if verbose:
+                print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
             time.sleep(20)
-            return self.check_ssllab()
+            return self.check_ssllab(verbose)
+        except TimeoutError:
+            if verbose:
+                print("[{0}] SSLLAB: Timeout Error! retry in 20 seconds...".format(self.address))
+            time.sleep(20)
+            return self.check_ssllab(verbose)
         else:
             if response.status_code == 200:
-                print("[{0}] SSLLAB: Initiated!".format(self.address))
-                return self.__analyze_ssllab()
+                if verbose:
+                    print("[{0}] SSLLAB: Initiated!".format(self.address))
+                return self.__analyze_ssllab(verbose)
             else:
                 return 'Not Available'
 
-    def __analyze_ssllab(self):
+    def __analyze_ssllab(self, verbose=True):
         payload = {
             'host': self.address,
             'all': 'done',
@@ -50,28 +57,37 @@ class Website:
         }
         try:
             response = requests.get('https://api.ssllabs.com/api/v3/analyze', params=payload)
-        except ConnectionError:
-            print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
+        except requests.exceptions.ConnectionError:
+            if verbose:
+                print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
             time.sleep(20)
-            return self.__analyze_ssllab()
+            return self.__analyze_ssllab(verbose)
+        except TimeoutError:
+            if verbose:
+                print("[{0}] SSLLAB: Timeout Error! retry in 20 seconds...".format(self.address))
+            time.sleep(20)
+            return self.__analyze_ssllab(verbose)
         else:
             if response.status_code == 200:
                 json_response = response.json()
                 if json_response['status'] == 'READY':
-                    print("[{0}] SSLLAB: Analyze Successful!".format(self.address))
+                    if verbose:
+                        print("[{0}] SSLLAB: Analyze Successful!".format(self.address))
                     self.ssllab_result = json.dumps(json_response)
                     return self.ssllab_result
                 elif json_response['status'] == 'ERROR':
-                    print("[{0}] SSLLAB: Analyze Failed!".format(self.address))
+                    if verbose:
+                        print("[{0}] SSLLAB: Analyze Failed!".format(self.address))
                     return json_response['statusMessage']
                 else:
-                    print("[{0}] SSLLAB: Status: {1}".format(self.address, json_response['status']))
+                    if verbose:
+                        print("[{0}] SSLLAB: Status: {1}".format(self.address, json_response['status']))
                     time.sleep(20)
-                    return self.__analyze_ssllab()
+                    return self.__analyze_ssllab(verbose)
             else:
                 return 'Not Available'
 
-    def check_ip(self):
+    def check_ip(self, verbose=True):
         """
         Get Website IP
         :return: string
@@ -83,7 +99,7 @@ class Website:
         finally:
             return self.ip
 
-    def check_redirect(self):
+    def check_redirect(self, verbose=True):
         """
         is http redirected to https
         :return: boolean
@@ -103,7 +119,7 @@ class Website:
         finally:
             return self.redirect
 
-    def check_hsts(self):
+    def check_hsts(self, verbose=True):
         """
         check if hsts is available on ssl
         :return: boolean
