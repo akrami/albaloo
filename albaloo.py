@@ -2,6 +2,7 @@ import os
 import datetime
 import website
 import optparse
+from termcolor import colored
 
 parser = optparse.OptionParser()
 parser.add_option('-o', '--output', dest='output_directory',
@@ -15,24 +16,24 @@ directory = options.output_directory
 verbose = options.verbose
 if not os.path.exists(directory):
     if verbose:
-        print("[Main] New Directory: {0}".format(directory))
+        print("[{0}] New Directory: {1}".format(colored('Main', 'green'), directory))
     os.makedirs(directory)
 if options.host:
     result = website.Website(options.host)
     ip = result.check_ip(verbose)
     if verbose:
-        print('[{0}] IP: {1}'.format(result.address, ip))
+        print('[{0}] IP: {1}'.format(colored(result.address, 'green'), ip))
     redirect = result.check_redirect(verbose)
     if verbose:
-        print('[{0}] HTTPS REDIRECT: {1}'.format(result.address, redirect))
+        print('[{0}] HTTPS REDIRECT: {1}'.format(colored(result.address, 'green'), redirect))
     hsts = result.check_hsts(verbose)
     if verbose:
-        print('[{0}] HSTS: {1}'.format(result.address, hsts))
+        print('[{0}] HSTS: {1}'.format(colored(result.address, 'green'), hsts))
     if verbose:
-        print('[{0}] SSLLAB: Start'.format(result.address))
+        print('[{0}] SSLLAB: Start'.format(colored(result.address, 'green')))
     ssllab_result = result.check_ssllab(verbose)
     if verbose:
-        print('[{0}] SSLLAB: Finished'.format(result.address))
+        print('[{0}] SSLLAB: Finished'.format(colored(result.address, 'green')))
     with open('{0}/{1}.json'.format(directory, result.address), 'w') as f:
         f.write(ssllab_result)
 elif options.input_file:
@@ -42,18 +43,18 @@ elif options.input_file:
         temp = website.Website(line)
         ip = temp.check_ip(verbose)
         if verbose:
-            print('[{0}] IP: {1}'.format(line, ip))
+            print('[{0}] IP: {1}'.format(colored(line, 'green'), ip))
         redirect = temp.check_redirect(verbose)
         if verbose:
-            print('[{0}] HTTPS REDIRECT: {1}'.format(line, redirect))
+            print('[{0}] HTTPS REDIRECT: {1}'.format(colored(line, 'green'), redirect))
         hsts = temp.check_hsts(verbose)
         if verbose:
-            print('[{0}] HSTS: {1}'.format(line, hsts))
+            print('[{0}] HSTS: {1}'.format(colored(line, 'green'), hsts))
         if verbose:
-            print("[{0}] SSLLAB: Start ".format(line))
+            print("[{0}] SSLLAB: Start ".format(colored(line, 'green')))
         result = temp.check_ssllab(verbose)
         if verbose:
-            print("[{0}] SSLLAB: Finished ".format(line))
+            print("[{0}] SSLLAB: Finished ".format(colored(line, 'green')))
         with open(directory + "/" + line + '.json', 'w') as f:
             f.write(result)
 else:

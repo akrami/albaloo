@@ -3,6 +3,7 @@ import time
 import socket
 import requests
 import re
+from termcolor import colored
 
 
 class Website:
@@ -33,18 +34,18 @@ class Website:
             response = requests.get('https://api.ssllabs.com/api/v3/analyze', params=payload)
         except requests.exceptions.ConnectionError:
             if verbose:
-                print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
+                print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(colored(self.address, 'green')))
             time.sleep(20)
             return self.check_ssllab(verbose)
         except TimeoutError:
             if verbose:
-                print("[{0}] SSLLAB: Timeout Error! retry in 20 seconds...".format(self.address))
+                print("[{0}] SSLLAB: Timeout Error! retry in 20 seconds...".format(colored(self.address, 'green')))
             time.sleep(20)
             return self.check_ssllab(verbose)
         else:
             if response.status_code == 200:
                 if verbose:
-                    print("[{0}] SSLLAB: Initiated!".format(self.address))
+                    print("[{0}] SSLLAB: Initiated!".format(colored(self.address, 'green')))
                 return self.__analyze_ssllab(verbose)
             else:
                 return 'Not Available'
@@ -59,12 +60,12 @@ class Website:
             response = requests.get('https://api.ssllabs.com/api/v3/analyze', params=payload)
         except requests.exceptions.ConnectionError:
             if verbose:
-                print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(self.address))
+                print("[{0}] SSLLAB: Connection Error! retry in 20 seconds...".format(colored(self.address, 'green')))
             time.sleep(20)
             return self.__analyze_ssllab(verbose)
         except TimeoutError:
             if verbose:
-                print("[{0}] SSLLAB: Timeout Error! retry in 20 seconds...".format(self.address))
+                print("[{0}] SSLLAB: Timeout Error! retry in 20 seconds...".format(colored(self.address, 'green')))
             time.sleep(20)
             return self.__analyze_ssllab(verbose)
         else:
@@ -72,16 +73,16 @@ class Website:
                 json_response = response.json()
                 if json_response['status'] == 'READY':
                     if verbose:
-                        print("[{0}] SSLLAB: Analyze Successful!".format(self.address))
+                        print("[{0}] SSLLAB: Analyze Successful!".format(colored(self.address, 'green')))
                     self.ssllab_result = json.dumps(json_response)
                     return self.ssllab_result
                 elif json_response['status'] == 'ERROR':
                     if verbose:
-                        print("[{0}] SSLLAB: Analyze Failed!".format(self.address))
+                        print("[{0}] SSLLAB: Analyze Failed!".format(colored(self.address, 'green')))
                     return json_response['statusMessage']
                 else:
                     if verbose:
-                        print("[{0}] SSLLAB: Status: {1}".format(self.address, json_response['status']))
+                        print("[{0}] SSLLAB: Status: {1}".format(colored(self.address, 'green'), json_response['status']))
                     time.sleep(20)
                     return self.__analyze_ssllab(verbose)
             else:
