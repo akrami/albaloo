@@ -107,5 +107,19 @@ class Website:
         check if hsts is available on ssl
         :return: boolean
         """
-        self.hsts = True
-        return True
+        if re.match(r'^https://', self.address):
+            host = self.address
+        elif re.match(r'^http://', self.address):
+            host = self.address.replace('http://', 'https://')
+        else:
+            host = 'https://{0}'.format(self.address)
+        try:
+            response = requests.get(host)
+        except ConnectionError:
+            self.hsts = False
+        except requests.exceptions.SSLError:
+            self.hsts = False
+        else:
+            self.hsts = True if 'strict-transport-security' in response.headers else False
+        finally:
+            return self.hsts
