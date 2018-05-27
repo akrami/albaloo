@@ -59,7 +59,8 @@ class Website:
                 json_response = response.json()
                 if json_response['status'] == 'READY':
                     print("[{0}] SSLLAB: Analyze Successful!".format(self.address))
-                    return json.dumps(json_response, sort_keys=False, indent=4)
+                    self.ssllab_result = json.dumps(json_response)
+                    return self.ssllab_result
                 elif json_response['status'] == 'ERROR':
                     print("[{0}] SSLLAB: Analyze Failed!".format(self.address))
                     return json_response['statusMessage']
