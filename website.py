@@ -1,6 +1,6 @@
 import json
 import time
-
+import socket
 import requests
 
 
@@ -69,13 +69,17 @@ class Website:
             else:
                 return 'Not Available'
 
-    def get_ip(self):
+    def check_ip(self):
         """
         Get Website IP
         :return: string
         """
-        self.ip = '0.0.0.0'
-        return True
+        try:
+            self.ip = socket.gethostbyname(self.address)
+        except socket.gaierror:
+            self.ip = "Not Found"
+        finally:
+            return self.ip
 
     def check_redirect(self):
         """

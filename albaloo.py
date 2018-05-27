@@ -12,8 +12,10 @@ if not os.path.exists(directory):
 file = open('test.txt', 'r')
 for line in file:
     line = line.strip()
-    print("[{0}] SSLLAB: Start ".format(line))
     temp = website.Website(line)
+    ip = temp.check_ip()
+    print('[{0}] IP: {1}'.format(line, ip))
+    print("[{0}] SSLLAB: Start ".format(line))
     result = temp.check_ssllab()
     print("[{0}] SSLLAB: Finished ".format(line))
     with open(directory + "/" + line + '.json', 'w') as f:
