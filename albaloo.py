@@ -38,24 +38,25 @@ if options.host:
         f.write(ssllab_result)
 elif options.input_file:
     file = open(options.input_file, 'r')
-    for line in file:
-        line = line.strip()
-        temp = website.Website(line)
+    hosts = file.readlines()
+    hosts = [x.strip() for x in hosts]
+    for host in hosts:
+        temp = website.Website(host)
         ip = temp.check_ip(verbose)
         if verbose:
-            print('[{0}] IP: {1}'.format(colored(line, 'green'), ip))
+            print('[{0}] IP: {1}'.format(colored(host, 'green'), ip))
         redirect = temp.check_redirect(verbose)
         if verbose:
-            print('[{0}] HTTPS REDIRECT: {1}'.format(colored(line, 'green'), redirect))
+            print('[{0}] HTTPS REDIRECT: {1}'.format(colored(host, 'green'), redirect))
         hsts = temp.check_hsts(verbose)
         if verbose:
-            print('[{0}] HSTS: {1}'.format(colored(line, 'green'), hsts))
+            print('[{0}] HSTS: {1}'.format(colored(host, 'green'), hsts))
         if verbose:
-            print("[{0}] SSLLAB: Start ".format(colored(line, 'green')))
+            print("[{0}] SSLLAB: Start ".format(colored(host, 'green')))
         result = temp.check_ssllab(verbose)
         if verbose:
-            print("[{0}] SSLLAB: Finished ".format(colored(line, 'green')))
-        with open(directory + "/" + line + '.json', 'w') as f:
+            print("[{0}] SSLLAB: Finished ".format(colored(host, 'green')))
+        with open(directory + "/" + host + '.json', 'w') as f:
             f.write(result)
 else:
     print('Please select at least one of -w or -i options (-h for Help)')
