@@ -16,8 +16,9 @@ options, remainder = parser.parse_args()
 directory = options.output_directory
 
 hosts = []
+results = []
 if options.host:
-    hosts = [option.host]
+    hosts = [options.host]
 elif options.input_file:
     file = open(options.input_file, 'r')
     hosts = file.readlines()
@@ -53,5 +54,15 @@ for host in hosts:
     result = temp.check_ssllab()
     bar.update(1)
     bar.write("[{0}] SSLLAB: Finished ".format(colored(host, 'green')))
+    results.append(temp)
     with open(directory + "/" + host + '.json', 'w') as f:
             f.write(result)
+
+wrapper = '''<!doctype html>
+<html>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Albaloo Result</title>
+    <meta name="description" content="Albaloo SSL Check Result">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+'''
