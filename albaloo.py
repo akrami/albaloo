@@ -48,8 +48,10 @@ for host in hosts:
     hsts = temp.check_hsts()
     bar.update(1)
     bar.write('[{0}] HSTS: {1}'.format(colored(host, 'green'), hsts))
+    bar.update(1)
     bar.write("[{0}] SSLLAB: Start (may take several minutes)".format(colored(host, 'green')))
     result = temp.check_ssllab()
+    bar.update(1)
     bar.write("[{0}] SSLLAB: Finished ".format(colored(host, 'green')))
     with open(directory + "/" + host + '.json', 'w') as f:
             f.write(result)
