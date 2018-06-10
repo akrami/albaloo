@@ -63,34 +63,26 @@ wrapper = '''<!doctype html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Albaloo Result</title>
+    <title>SSL Results</title>
     <meta name="description" content="Albaloo SSL Check Result">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <style>
-        body {
-                background-color: #3e94ec;
+            body {
+                background-color: #EEEEEE;
                 font-family: helvetica, arial, sans-serif;
                 font-size: 13px;
-                font-weight: 400;
+                font-weight: normal;
                 text-rendering: optimizeLegibility;
             }
-            div.table-title {
-                display: block;
-                margin: auto;
-                max-width: 600px;
-                padding:5px;
-                width: 100%;
-            }
             h1.table-title {
-                color: #fafafa;
-                font-size: 30px;
-                font-weight: 400;
-                font-style:normal;
-                font-family: helvetica, arial, sans-serif;
-                text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
-                text-transform:uppercase;
+                color: #353535;
+                font-size: 3.5em;
+                font-weight: bolder;
+                font-style: normal;
+                font-family: Georgia, serif;
+                text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3);
             }
-            
+            /*** Table Styles **/
             .table-fill {
                 background: white;
                 border-radius:3px;
@@ -98,8 +90,9 @@ wrapper = '''<!doctype html>
                 margin: auto;
                 padding:5px;
                 width: 100%;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 5px 0 #C1C3D1;
                 animation: float 5s infinite;
+                border: 1px rgba(0, 0, 0, 0.7);
             }
             
             th {
@@ -113,14 +106,14 @@ wrapper = '''<!doctype html>
                 text-align: left;
                 text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
                 vertical-align: middle;
+                font-family: calibri, verdana, sans-serif;
             }
             th:first-child {
-                border-top-left-radius:3px;
+                border-left: 1px solid #1b1e24;
             }
             
             th:last-child {
-                border-top-right-radius:3px;
-                border-right:none;
+                border-right: 1px solid #1b1e24;
             }
             
             tr {
@@ -130,8 +123,7 @@ wrapper = '''<!doctype html>
                 font-size:13px;
                 font-weight:normal;
                 text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
-            }
-            
+            }            
             tr:first-child {
                 border-top:none;
             }
@@ -142,7 +134,6 @@ wrapper = '''<!doctype html>
             tr:nth-child(odd) td {
                 background:#EBEBEB;
             }
-            
             tr:last-child td:first-child {
                 border-bottom-left-radius:3px;
             }
@@ -160,18 +151,15 @@ wrapper = '''<!doctype html>
                 font-size:14px;
                 text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
                 border-right: 1px solid #C1C3D1;
+                font-family: calibri, verdana, sans-serif;
             }
             td a {
-                color: #666B85;
+                text-decoration: none;
+                color: #1b1e24;
                 font-weight: bold;
-                text-decoration: none;
             }
-            td a:hover {
-                color: black;
-                text-decoration: none;
-            }
-            td:last-child {
-                border-right: 0px;
+            td:first-child {
+                border-left: 1px solid #C1C3D1;
             }
             th.text-left {
                 text-align: left;
@@ -202,7 +190,7 @@ wrapper = '''<!doctype html>
                 margin: 0;
                 border-top-left-radius: 5px;
             }
-    </style>
+        </style>
 </head>
 <body>
     <h1 class="table-title">SSL Results</h1>
@@ -211,6 +199,7 @@ wrapper = '''<!doctype html>
             <tr>
                 <th>Domain</th>
                 <th>IP</th>
+                <th>SSLLab Rank</th>
                 <th>HTTP to HTTPS Redirect?</th>
                 <th>HSTS?</th>
             </tr>
@@ -228,7 +217,7 @@ for result in results:
         hsts_emoji = '👍'
     else:
         hsts_emoji = '⛔'
-    wrapper += '<tr><td><a href="{0}.json">{0}</a></td><td>{1}</td><td>{2}</td><td>{3}</td></tr>'.format(result.address, result.ip, redirect_emoji, hsts_emoji)
+    wrapper += '<tr><td><a href="{0}.json">{0} ↗</a></td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>'.format(result.address, result.ip, 'Not Available', redirect_emoji, hsts_emoji)
 
 wrapper += '</tbody></table><p id="footer">Generated by <a href="https://github.com/akrami/albaloo/">Albaloo</a> 🍒</p></body></html>'
 with open('{0}/index.html'.format(directory), 'w', encoding='UTF-8') as g:
