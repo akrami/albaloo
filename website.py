@@ -41,7 +41,7 @@ class Website:
             if response.status_code == 200:
                 return self.__analyze_ssllab()
             else:
-                return 'Not Available'
+                return '{"status": "not available"}'
 
     def __analyze_ssllab(self):
         payload = {
@@ -64,12 +64,14 @@ class Website:
                     self.ssllab_result = json.dumps(json_response)
                     return self.ssllab_result
                 elif json_response['status'] == 'ERROR':
-                    return json_response['statusMessage']
+                    self.ssllab_result = json.dumps(json_response)
+                    return self.ssllab_result
                 else:
                     sleep(20)
                     return self.__analyze_ssllab()
             else:
-                return 'Not Available'
+                self.ssllab_result = '{"status": "not available"}'
+                return self.ssllab_result
 
     def check_ip(self):
         """

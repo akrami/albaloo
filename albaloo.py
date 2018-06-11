@@ -1,6 +1,7 @@
 import os
 import datetime
 from website import Website
+from generator import generate_html
 import optparse
 from termcolor import colored
 from tqdm import tqdm
@@ -57,3 +58,5 @@ for host in hosts:
     with open("{0}/{1}.json".format(directory, host), 'w') as f:
         f.write(result)
         f.close()
+generate_html('{0}/index.html'.format(directory), results)
+exit()
